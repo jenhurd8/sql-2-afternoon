@@ -249,23 +249,44 @@ VALUES
 -- Get all products for the first order.
 select *
 from orders
-WHERE id = 1;
+    JOIN products on orders.product_id = products.id
+WHERE orders.id = 1;
 
 -- Get all orders.
 select *
 from orders;
 
 -- Get the total cost of an order ( sum the price of all products on an order ).
-/* select * FROM ORDERS WHERE id=1; */
 select SUM(price)
-from products
-where name = "Shoes";
+from orders
+    JOIN products on orders.product_id = products.id
+WHERE orders.id = 1;
 
 -- Add a foreign key reference from Orders to Users.
-ALTER TABLE orders
-ADD COLUMN parent_id INTEGER
-REFERENCES users
-(id);
+ALTER TABLE orders ADD FOREIGN KEY (fk_users)
+                                REFERENCES users(id);
 
+-- Update the Orders table to link a user to each order.
+select *
+from orders
+    JOIN users on orders.user_id = users.id;
+
+-- Run queries against your data.
+select *
+from orders, users, products
+
+-- Get all orders for a user.
+select *
+from orders
+    JOIN users on orders.user_id = users.id
+WHERE orders.id = 1;
+
+-- Get how many orders each user has.
+select
+    count(*)
+from
+    orders
+group by
+user_id;
 
 
